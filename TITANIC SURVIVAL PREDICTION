@@ -1,0 +1,52 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+
+struct Passenger {
+    int pclass;
+    int sex;
+    float age;
+    int survived;
+};
+
+// Load data from a CSV file
+std::vector<Passenger> loadDataset(const std::string& filename) {
+    std::vector<Passenger> dataset;
+    std::ifstream file(filename);
+    std::string line;
+
+    while (getline(file, line)) {
+        std::stringstream ss(line);
+        std::string cell;
+        Passenger passenger;
+
+        getline(ss, cell, ','); passenger.pclass = std::stoi(cell);
+        getline(ss, cell, ','); passenger.sex = cell == "male" ? 0 : 1;
+        getline(ss, cell, ','); passenger.age = cell.empty() ? 0 : std::stof(cell);
+        getline(ss, cell, ','); passenger.survived = std::stoi(cell);
+
+        dataset.push_back(passenger);
+    }
+
+    return dataset;
+}
+
+int main() {
+    // Load the dataset
+    std::vector<Passenger> dataset = loadDataset("titanic.csv");
+
+    // Basic decision rule for prediction
+    for (const Passenger& passenger : dataset) {
+        std::string prediction = "Not Survived";
+        if (passenger.sex == 1 && passenger.age < 18) {
+            prediction = "Survived";
+        }
+
+        std::cout << "Passenger (Age: " << passenger.age << ", Sex: " << (passenger.sex == 0 ? "Male" : "Female")
+                  << ") Prediction: " << prediction << std::endl;
+    }
+
+    return 0;
+}
