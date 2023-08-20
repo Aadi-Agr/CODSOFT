@@ -1,1 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <cmath>
+#include <algorithm>
+#include <random>
 
+// Define a structure for a credit card transaction
+struct Transaction {
+    std::vector<double> features;
+    int label; // 0 for genuine, 1 for fraudulent
+};
+
+// Function to read transactions from a CSV file
+std::vector<Transaction> readTransactions(const std::string& filename) {
+    std::vector<Transaction> transactions;
+    // Read and parse data from the file
+    // Populate the 'transactions' vector
+    return transactions;
+}
+
+// Function to normalize features
+void normalizeFeatures(std::vector<Transaction>& transactions) {
+    // Normalize the features in each transaction
+}
+
+// Function to train a simple classifier
+void trainClassifier(const std::vector<Transaction>& data) {
+    // Train the classifier using data
+    // Placeholder code
+    // Implement your classifier training logic here
+}
+
+int main() {
+    // Read transactions from CSV file
+    std::vector<Transaction> transactions = readTransactions("credit_card_transactions.csv");
+
+    // Normalize features
+    normalizeFeatures(transactions);
+
+    // Shuffle the transactions
+    std::shuffle(transactions.begin(), transactions.end(), std::default_random_engine());
+
+    // Split data into training and testing sets
+    const double trainRatio = 0.8;
+    const size_t trainSize = static_cast<size_t>(trainRatio * transactions.size());
+
+    std::vector<Transaction> trainingData(transactions.begin(), transactions.begin() + trainSize);
+    std::vector<Transaction> testingData(transactions.begin() + trainSize, transactions.end());
+
+    // Train the classifier
+    trainClassifier(trainingData);
+
+    // Evaluate the model on testingData
+    // Placeholder code
+    // Implement model evaluation using precision, recall, and F1-score
+    // Compare predictions on testingData with true labels and calculate metrics
+
+    return 0;
+}
