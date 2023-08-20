@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+// Define the Iris data structure
+struct Iris {
+    double sepalLength;
+    double sepalWidth;
+    double petalLength;
+    double petalWidth;
+    int species;  // 0: setosa, 1: versicolor, 2: virginica
+};
+
+// Function to calculate Euclidean distance between two Iris instances
+double calculateDistance(const Iris& iris1, const Iris& iris2) {
+    double sepalLengthDiff = iris1.sepalLength - iris2.sepalLength;
+    double sepalWidthDiff = iris1.sepalWidth - iris2.sepalWidth;
+    double petalLengthDiff = iris1.petalLength - iris2.petalLength;
+    double petalWidthDiff = iris1.petalWidth - iris2.petalWidth;
+
+    return std::sqrt(sepalLengthDiff * sepalLengthDiff +
+                     sepalWidthDiff * sepalWidthDiff +
+                     petalLengthDiff * petalLengthDiff +
+                     petalWidthDiff * petalWidthDiff);
+}
+
+// Function to classify Iris using k-NN algorithm
+// Function to classify Iris using k-NN algorithm
+
+int kNNClassify(const std::vector<Iris>& trainingData, const Iris& iris, int k) {
+    std::vector<std::pair<double, int>> distances;  // Distance, Species pair
+
+    // Calculate distances and store in the vector
+    for (const Iris& trainingIris : trainingData) {
+        double distance = calculateDistance(trainingIris, iris);
+        distances.push_back({distance, trainingIris.species});
+    }
+
+    // Sort distances in ascending order
+    std::sort(distances.begin(), distances.end());
+
+    // Count species occurrences in k-nearest neighbors
+    std::vector<int> speciesCount(3, 0);  // Count for each species
+
+    int numNeighbors = std::min(k, static_cast<int>(distances.size()));  // Ensure k is within bounds
+    for (int i = 0; i < numNeighbors; ++i) {
+        int species = distances[i].second;
+        speciesCount[species]++;
+    }
+
+    // Find the species with the highest count
+    int predictedSpecies = std::distance(speciesCount.begin(),
+                                          std::max_element(speciesCount.begin(), speciesCount.end()));
+
+    return predictedSpecies;
+}
+
+int main() {
+    // Sample training data (you can replace this with your dataset)
+    std::vector<Iris> trainingData = {
+        {5.1, 3.5, 1.4, 0.2, 0},
+        {4.9, 3.0, 1.4, 0.2, 0},
+        // ... more training data ...
+    };
+
+    Iris newIris = {5.0, 3.4, 1.5, 0.2, 0};  // New Iris measurements to classify
+
+    int k = 3;  // Number of neighbors
+
+    int predictedSpecies = kNNClassify(trainingData, newIris, k);
+
+    std::cout << "Predicted Species: " << predictedSpecies << std::endl;
+
+    return 0;
+}
